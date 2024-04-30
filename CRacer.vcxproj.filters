@@ -20,17 +20,28 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resource\redcar.png">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="resource\purpcar.png">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="resource\bluecar.png">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
     <Image Include="resource\back.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+    <Image Include="resource\racingtrack.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resource\enemy1.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resource\enemy2.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resource\enemy3.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resource\player.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="resource\engine.mp3">
+      <Filter>Файлы ресурсов</Filter>
+    </Media>
   </ItemGroup>
 </Project>
