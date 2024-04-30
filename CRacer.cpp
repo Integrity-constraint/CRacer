@@ -6,7 +6,7 @@ int main()
     // Инициализация окна
     const int windowWidth = 1024;
     const int windowHeight = 768;
-    InitWindow(windowWidth, windowHeight, "Гонки на выбывание");
+    InitWindow(windowWidth, windowHeight, "CRacer");
 
     // Загрузка спрайтов
     Texture2D playerCar = LoadTexture("resource/bluecar.png"); // Замените на путь к вашему спрайту
