@@ -1,35 +1,30 @@
-﻿// CRacer.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿#include "raylib.h"
+#include <stdlib.h> // Для функции rand()
 
-#include <iostream>
-#include <raylib.h>
-#include <stdlib.h> 
-#include <math.h> 
-
-
-typedef struct Car {
-    Vector2 position;
-    Vector2 speed;
-    float acceleration;
-    float rotation;
-    Texture2D sprite;
-} Car;
-void main()
+int main()
 {
-    setlocale(LC_ALL, "Russian");
     // Инициализация окна
     const int windowWidth = 1024;
     const int windowHeight = 768;
-    InitWindow(windowWidth, windowHeight, "CRacer");
+    InitWindow(windowWidth, windowHeight, "Гонки на выбывание");
 
     // Загрузка спрайтов
-    Texture2D playerCarSprite = LoadTexture("resource/redcar.png"); // Замените на путь к вашему спрайту
-    Texture2D enemyCar1Sprite = LoadTexture("resource/purpcar.png"); // Замените на путь к вашему спрайту
-    Texture2D enemyCar2Sprite = LoadTexture("resource/bluecar.png"); // Замените на путь к вашему спрайту
-    // Инициализация машинок
-    Car playerCar = { { windowWidth / 2.0f, windowHeight / 2.0f }, { 0.0f, 0.0f }, 0.0f, 0.0f, playerCarSprite };
-    Car enemyCar1 = { { windowWidth / 2.0f - playerCarSprite.width, windowHeight / 2.0f }, { 0.0f, 0.15f }, 0.0f, 0.0f, enemyCar1Sprite }; // Уменьшенная скорость
-    Car enemyCar2 = { { windowWidth / 2.0f + playerCarSprite.width, windowHeight / 2.0f }, { 0.0f, 0.225f }, 0.0f, 0.0f, enemyCar2Sprite }; // Уменьшенная скорость
+    Texture2D playerCar = LoadTexture("resource/bluecar.png"); // Замените на путь к вашему спрайту
+    Texture2D enemyCar1 = LoadTexture("resource/purpcar.png"); // Замените на путь к вашему спрайту
+    Texture2D enemyCar2 = LoadTexture("resource/redcar.png"); // Замените на путь к вашему спрайту
+    Texture2D menuBackground = LoadTexture("resource/back.png"); // Замените на путь к вашему фоновому изображению
+
+    // Позиции машин
+    Vector2 playerCarPosition = { windowWidth / 2.0f, windowHeight / 2.0f };
+    Vector2 enemyCar1Position = { windowWidth / 2.0f - playerCar.width, windowHeight / 2.0f };
+    Vector2 enemyCar2Position = { windowWidth / 2.0f + playerCar.width, windowHeight / 2.0f };
+
+    // Скорости машин противников
+    Vector2 enemyCar1Speed = { 0.0f, 0.2f }; // Уменьшенная скорость
+    Vector2 enemyCar2Speed = { 0.0f, 0.2f }; // Уменьшенная скорость
+
+    // Скорость машины игрока
+    float playerCarSpeed = 0.2f; // Уменьшенная скорость
 
     // Состояние игры
     bool isGameStarted = false;
@@ -40,36 +35,23 @@ void main()
         // Обновление
         if (isGameStarted)
         {
-            // Управление машинкой игрока
-            if (IsKeyDown(KEY_RIGHT)) playerCar.rotation += 0.1f; // Уменьшенная скорость поворота
-            if (IsKeyDown(KEY_LEFT)) playerCar.rotation -= 0.1f; // Уменьшенная скорость поворота
+            // Управление машиной игрока
+            if (IsKeyDown(KEY_RIGHT)) playerCarPosition.x += playerCarSpeed;
+            if (IsKeyDown(KEY_LEFT)) playerCarPosition.x -= playerCarSpeed;
+            if (IsKeyDown(KEY_UP)) playerCarPosition.y -= playerCarSpeed;
+            if (IsKeyDown(KEY_DOWN)) playerCarPosition.y += playerCarSpeed;
 
-            // Скорость
-            playerCar.speed.x = sin(playerCar.rotation * DEG2RAD) * 0.3f; // Уменьшенная скорость
-            playerCar.speed.y = cos(playerCar.rotation * DEG2RAD) * 0.3f; // Уменьшенная скорость
+            // Обновление позиций машин противников
+            enemyCar1Position.y += enemyCar1Speed.y;
+            enemyCar2Position.y += enemyCar2Speed.y;
 
-            // Ускорение
-            if (IsKeyDown(KEY_UP))
-            {
-                if (playerCar.acceleration < 1) playerCar.acceleration += 0.015f; // Уменьшенное ускорение
-            }
-            else
-            {
-                if (playerCar.acceleration > 0) playerCar.acceleration -= 0.0075f; // Уменьшенное ускорение
-                else if (playerCar.acceleration < 0) playerCar.acceleration = 0;
-            }
+            // Добавляем случайные повороты
+            enemyCar1Position.x += (rand() % 3 - 1) * enemyCar1Speed.y; // -1, 0, или 1
+            enemyCar2Position.x += (rand() % 3 - 1) * enemyCar2Speed.y; // -1, 0, или 1
 
-            // Движение
-            playerCar.position.x += (playerCar.speed.x * playerCar.acceleration);
-            playerCar.position.y -= (playerCar.speed.y * playerCar.acceleration);
-
-            // Обновление позиций машинок противников
-            enemyCar1.position.y += enemyCar1.speed.y;
-            enemyCar2.position.y += enemyCar2.speed.y;
-
-            // Если машинки противников достигли нижней границы, переместить их наверх
-            if (enemyCar1.position.y > windowHeight) enemyCar1.position.y = -enemyCar1.sprite.height;
-            if (enemyCar2.position.y > windowHeight) enemyCar2.position.y = -enemyCar2.sprite.height;
+            // Если машины противников достигли нижней границы, переместить их наверх
+            if (enemyCar1Position.y > windowHeight) enemyCar1Position.y = -enemyCar1.height;
+            if (enemyCar2Position.y > windowHeight) enemyCar2Position.y = -enemyCar2.height;
         }
         else
         {
@@ -92,13 +74,15 @@ void main()
 
         if (isGameStarted)
         {
-            // Отрисовка машинок
-            DrawTextureEx(playerCar.sprite, playerCar.position, playerCar.rotation, 1.0f, WHITE);
-            DrawTextureEx(enemyCar1.sprite, enemyCar1.position, enemyCar1.rotation, 1.0f, WHITE);
-            DrawTextureEx(enemyCar2.sprite, enemyCar2.position, enemyCar2.rotation, 1.0f, WHITE);
+            // Отрисовка машин
+            DrawTexture(playerCar, playerCarPosition.x, playerCarPosition.y, WHITE);
+            DrawTexture(enemyCar1, enemyCar1Position.x, enemyCar1Position.y, WHITE);
+            DrawTexture(enemyCar2, enemyCar2Position.x, enemyCar2Position.y, WHITE);
         }
         else
         {
+            // Отрисовка меню с фоновым изображением
+            DrawTexture(menuBackground, 0, 0, WHITE);
             // Отрисовка кнопки "Играть"
             DrawRectangle(windowWidth / 2 - 50, windowHeight / 2 - 20, 100, 40, LIGHTGRAY);
             DrawText("play", windowWidth / 2 - MeasureText("play", 20) / 2, windowHeight / 2 - 10, 20, BLACK);
@@ -108,10 +92,11 @@ void main()
     }
 
     // Освобождение ресурсов
-    UnloadTexture(playerCar.sprite);
-    UnloadTexture(enemyCar1.sprite);
-    UnloadTexture(enemyCar2.sprite);
+    UnloadTexture(playerCar);
+    UnloadTexture(enemyCar1);
+    UnloadTexture(enemyCar2);
+    UnloadTexture(menuBackground); // Освобождаем ресурсы фона
     CloseWindow();
-   
-}
 
+    return 0;
+}

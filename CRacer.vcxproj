@@ -130,6 +130,7 @@
     <ClCompile Include="CRacer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resource\back.png" />
     <Image Include="resource\bluecar.png" />
     <Image Include="resource\purpcar.png" />
     <Image Include="resource\redcar.png" />

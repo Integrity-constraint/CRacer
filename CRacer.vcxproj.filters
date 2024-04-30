@@ -29,5 +29,8 @@
     <Image Include="resource\bluecar.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+    <Image Include="resource\back.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>
