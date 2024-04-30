@@ -38,6 +38,18 @@
     <Image Include="resource\player.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+    <Image Include="resource\enemy4.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resource\enemy5.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resource\enemy6.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="resource\enemy7.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="resource\engine.mp3">

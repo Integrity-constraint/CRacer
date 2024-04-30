@@ -134,6 +134,10 @@
     <Image Include="resource\enemy1.png" />
     <Image Include="resource\enemy2.png" />
     <Image Include="resource\enemy3.png" />
+    <Image Include="resource\enemy4.png" />
+    <Image Include="resource\enemy5.png" />
+    <Image Include="resource\enemy6.png" />
+    <Image Include="resource\enemy7.png" />
     <Image Include="resource\player.png" />
     <Image Include="resource\racingtrack.png" />
   </ItemGroup>
