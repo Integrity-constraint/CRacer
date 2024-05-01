@@ -168,7 +168,7 @@ int main() {
             if (hasCollided) {
                 DrawText("Game Over", windowWidth / 2 - MeasureText("Game Over", 40) / 2, windowHeight / 2 - 60, 40, RED);
                 DrawRectangle(windowWidth / 2 - 50, windowHeight / 2 + 20, 100, 40, neonViolet);
-                DrawText("back", windowWidth / 2 - MeasureText("back", 20) / 2, windowHeight / 2 + 40, 20, BLACK);
+                DrawText("back", windowWidth / 2 - MeasureText("back", 20) / 2, windowHeight / 2 + 40, 20, WHITE);
             }
 
         }
