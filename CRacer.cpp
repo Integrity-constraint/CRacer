@@ -4,7 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
-
+//вроде готово
 Vector2 GetRandomCarPosition(int windowWidth, int carWidth) {
     int x = rand() % (windowWidth - carWidth); // Случайная позиция по оси X
     return Vector2{ static_cast<float>(x), -static_cast<float>(carWidth) }; // Начинаем сверху экрана
