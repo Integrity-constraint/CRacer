@@ -25,7 +25,7 @@ int main() {
     const int windowWidth = 1024;
     const int windowHeight = 768;
     InitWindow(windowWidth, windowHeight, "CRacer");
-
+    bool isGamePaused = false;
     // Загрузка спрайтов
     Texture2D playerCar = LoadTexture("resource/player.png");
     std::vector<Texture2D> enemyCars;
@@ -66,8 +66,23 @@ int main() {
         // Обновление музыки
         UpdateMusicStream(soundtrack);
 
+        if (IsKeyPressed(KEY_TAB)) {
+            isGamePaused = !isGamePaused; // Переключаем состояние паузы
+
+            if (isGamePaused) {
+
+               
+                PauseMusicStream(soundtrack); // Пауза музыки
+
+
+            }
+            else {
+                ResumeMusicStream(soundtrack); // Возобновление музыки
+            }
+        }
+
         // Обновление
-        if (isGameStarted && !hasCollided) {
+        if (isGameStarted && !isGamePaused && !hasCollided) {
             // Управление машиной игрока
             if (IsKeyDown(KEY_RIGHT)) playerCarPosition.x += playerCarSpeed * GetFrameTime();
             if (IsKeyDown(KEY_LEFT)) playerCarPosition.x -= playerCarSpeed * GetFrameTime();
@@ -81,6 +96,8 @@ int main() {
                     break;
                 }
             }
+
+          
 
             // Обновление позиций машин противников
             for (size_t i = 0; i < enemyCarPositions.size(); ++i) {
@@ -109,6 +126,33 @@ int main() {
             gameTime += GetFrameTime();
         }
         else {
+
+         
+
+            if (IsKeyPressed(KEY_TAB) && hasCollided) {
+
+              
+
+                isGamePaused = false; // Возобновляем игру
+                hasCollided = false; // Сбрасываем состояние столкновения
+                // Возвращаем игрока к начальной позиции
+                playerCarPosition = Vector2{ static_cast<float>(windowWidth) / 2.0f, static_cast<float>(windowHeight) - playerCar.height };
+                // Сбрасываем таймер
+                gameTime = 0.0;
+
+                // Перемещаем машинки в новые случайные позиции
+                for (size_t i = 0; i < enemyCarPositions.size(); ++i) {
+                    enemyCarPositions[i] = GetRandomCarPosition(windowWidth, enemyCars[i].width);
+                }
+
+                // Возобновляем музыку
+                 // Возобновляем музыку
+                ResumeMusicStream(soundtrack);
+                // Проверяем, играет ли музыка, и если нет, запускаем её
+                if (!IsMusicStreamPlaying(soundtrack)) {
+                    PlayMusicStream(soundtrack);
+                }
+            }
 
             if (hasCollided && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 Vector2 mousePosition = GetMousePosition();
@@ -144,6 +188,8 @@ int main() {
             }
         }
 
+       
+
         // Отрисовка
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -158,17 +204,30 @@ int main() {
                 DrawTexture(enemyCars[i], (int)enemyCarPositions[i].x, (int)enemyCarPositions[i].y, WHITE);
             }
 
+            if (isGamePaused) {
+                // Отрисовка текста "PAUSE"
+                DrawText("PAUSE", windowWidth / 2 - MeasureText("PAUSE", 40) / 2, windowHeight / 2 - 60, 40, RED);
+
+                // Отрисовка кнопки "resume"
+               
+                DrawText("GAME PAUSED", windowWidth / 2 - MeasureText("GAME PAUSED", 20) / 2, windowHeight / 2 + 40, 20, WHITE);
+             
+
+               
+            }
+
             // Отрисовка таймера
             int minutes = (int)gameTime / 60;
             int seconds = (int)gameTime % 60;
             std::stringstream timerText;
             timerText << std::setfill('0') << std::setw(2) << minutes << ":" << std::setw(2) << seconds;
-            DrawText(timerText.str().c_str(), 10, 10, 20, WHITE);
+            DrawText(timerText.str().c_str(), 40, 20, 40, WHITE);
 
             if (hasCollided) {
                 DrawText("Game Over", windowWidth / 2 - MeasureText("Game Over", 40) / 2, windowHeight / 2 - 60, 40, RED);
                 DrawRectangle(windowWidth / 2 - 50, windowHeight / 2 + 20, 100, 40, neonViolet);
                 DrawText("back", windowWidth / 2 - MeasureText("back", 20) / 2, windowHeight / 2 + 40, 20, WHITE);
+                StopMusicStream(soundtrack);
             }
 
         }
